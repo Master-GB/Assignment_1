@@ -15,6 +15,6 @@ public class Designation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String designation_title;
+    @Column(name = "designation_title", nullable = false)
+    private String designationTitle;
 }
