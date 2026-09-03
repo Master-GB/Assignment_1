@@ -12,6 +12,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.employeemanagement.entity.EmployeeStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import java.util.List;
 
 @RestController
@@ -38,10 +45,27 @@ public class EmployeeController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'EMPLOYEE')")
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+    public ResponseEntity<Page<EmployeeResponse>> getAllEmployees(
+
+            @RequestParam(required = false)
+            String search,
+
+            @RequestParam(required = false)
+            EmployeeStatus status,
+
+            @PageableDefault(
+                    size = 10,
+                    sort = "firstName",
+                    direction = Sort.Direction.ASC
+            )
+            Pageable pageable) {
 
         return ResponseEntity.ok(
-                employeeService.getAllEmployees()
+                employeeService.getAllEmployees(
+                        search,
+                        status,
+                        pageable
+                )
         );
     }
 

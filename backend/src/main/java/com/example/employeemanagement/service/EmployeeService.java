@@ -11,6 +11,11 @@ import com.example.employeemanagement.exception.ResourceNotFoundException;
 import com.example.employeemanagement.repository.DesignationRepository;
 import com.example.employeemanagement.repository.EmployeeRepository;
 import com.example.employeemanagement.entity.EmployeeStatus;
+import com.example.employeemanagement.specification.EmployeeSpecification;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -117,12 +122,19 @@ public class EmployeeService {
 
 
     @Transactional(readOnly = true)
-    public List<EmployeeResponse> getAllEmployees() {
+    public Page<EmployeeResponse> getAllEmployees(
+            String search,
+            EmployeeStatus status,
+            Pageable pageable) {
 
-        return employeeRepository.findAll()
-                .stream()
-                .map(this::mapToResponse)
-                .toList();
+        Specification<Employee> specification =
+                Specification
+                        .where(EmployeeSpecification.search(search))
+                        .and(EmployeeSpecification.hasStatus(status));
+
+        return employeeRepository
+                .findAll(specification, pageable)
+                .map(this::mapToResponse);
     }
 
 
@@ -334,7 +346,6 @@ public class EmployeeService {
         );
 
 
-        // Designation information
         if (employee.getDesignation() != null) {
 
             response.setDesignationId(
