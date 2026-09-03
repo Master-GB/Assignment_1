@@ -39,7 +39,7 @@ public class Employee {
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "designation_id")
+    @JoinColumn(name = "designation_id", nullable = false)
     private Designation designation;
 
     @Column(name = "profile_image")

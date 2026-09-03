@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmployeeResponseDTO {
+public class EmployeeResponse{
 
     private Long id;
     private String employeeCode;
