@@ -5,6 +5,7 @@ import com.example.employeemanagement.dto.UserResponse;
 import com.example.employeemanagement.entity.User;
 import com.example.employeemanagement.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import com.example.employeemanagement.entity.Role;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,14 @@ public class UserService {
                 passwordEncoder.encode(request.getPassword())
         );
 
+        user.setRole(Role.EMPLOYEE);
+
         User savedUser = userRepository.save(user);
 
         return new UserResponse(
                 savedUser.getId(),
-                savedUser.getUsername()
+                savedUser.getUsername(),
+                savedUser.getRole().name()
         );
     }
 }
