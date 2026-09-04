@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EMS Admin</title>
+    <link rel="preload" href="/images/login.png" as="image">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .brand-gradient {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+        }
+        .brand-panel {
+            background: linear-gradient(160deg, #6366f1 0%, #7c4fe0 55%, #a855f7 100%);
+            background-color: #1a1a2e; /* Dark background while image loads */
+        }
+        .blob {
+            position: absolute;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .input-field:focus {
+            border-color: #a855f7;
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white">
+    <div class="min-h-screen flex flex-col lg:flex-row">
+
+        <!-- Left Panel: Brand / Illustration -->
+        <div class="brand-panel relative overflow-hidden hidden lg:flex lg:w-1/2 flex-col justify-between p-4 text-white">
+            <!-- Background Image -->
+            <img th:src="@{/images/login.png}"
+                 src="/images/login.png"
+                 alt="Team collaboration"
+                 class="absolute inset-0 w-full h-full object-cover"
+                 onerror="this.src='https://images.unsplash.com/photo-1521737711867-e7b006022961?auto=format&fit=crop&w=1200&q=80'">
+
+            <!-- Overlay for text readability -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-transparent to-black/80"></div>
+
+            <!-- Decorative blobs -->
+            <div class="blob w-40 h-40 -top-10 -left-10"></div>
+            <div class="blob w-24 h-24 top-1/3 right-10"></div>
+            <div class="blob w-56 h-56 -bottom-20 -left-16"></div>
+
+            <!-- Centered headline -->
+            <div class="relative z-10 flex-1 flex items-center justify-center">
+                <h1 class="text-4xl xl:text-6xl font-extrabold leading-tight max-w-lg tracking-tight text-center">
+                    Welcome GB Creations
+                </h1>
+            </div>
+
+            <!-- Bottom supporting text -->
+            <div class="relative z-10 text-center">
+                <p class="text-white/65 text-lg max-w-lg mx-auto leading-relaxed font-normal">
+                    Streamline your workforce management with powerful tools designed for modern businesses
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Panel: Login Form -->
+        <div class="flex-1 flex items-center justify-center p-6 sm:p-10">
+            <div class="w-full max-w-sm">
+
+                <!-- Logo -->
+                <div class="flex flex-col items-center -mb-2">
+                    <img th:src="@{/images/logo.png}"
+                         src="/images/logo.png"
+                         alt="EMS Admin Logo"
+                         class="w-[100px] h-[100px] object-contain"
+                         onerror="this.style.display='none'">
+                </div>
+
+                <h1 class="text-3xl font-bold text-slate-900 text-center mb-1">Sign In</h1>
+                <p class="text-slate-500 text-sm text-center mb-8">Please enter your details to sign in</p>
+
+                <form th:action="@{/login}" method="post" class="space-y-5">
+                    <!-- Error Message -->
+                    <div th:if="${param.error}" class="bg-red-50 border border-red-200 rounded-lg p-3">
+                        <p class="text-red-600 text-sm text-center" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION != null ? session.SPRING_SECURITY_LAST_EXCEPTION.message : 'Invalid username or password'}">
+                            Invalid username or password
+                        </p>
+                    </div>
+
+                    <!-- Logout Message -->
+                    <div th:if="${param.logout}" class="bg-emerald-50 border border-emerald-200 rounded-lg p-3">
+                        <p class="text-emerald-600 text-sm text-center">You have been logged out successfully</p>
+                    </div>
+
+                    <!-- Username -->
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-slate-700 mb-2">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            required
+                            autofocus
+                            class="input-field w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
+                            placeholder="Enter your username"
+                        >
+                    </div>
+
+                    <!-- Password -->
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            required
+                            class="input-field w-full px-4 py-3 rounded-lg bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none transition-all"
+                            placeholder="Enter your password"
+                        >
+                    </div>
+
+                    <!-- Remember Me / Forgot Password -->
+                    <div class="flex items-center justify-between text-sm">
+                        <label class="flex items-center gap-2 text-slate-600 cursor-pointer select-none">
+                            <input type="checkbox" name="remember-me" class="rounded border-slate-300 text-purple-600 focus:ring-purple-500">
+                            Remember Me
+                        </label>
+                        <a href="#" class="font-medium" style="color:#a855f7;">Forgot Password?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        class="w-full py-3 px-4 rounded-lg font-semibold text-white transition-all duration-200 hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 brand-gradient"
+                    >
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="mt-6 text-center">
+                    <p class="text-slate-400 text-sm">
+                        Contact administrator if you need access
+                    </p>
+                </div>
+
+                <!-- Copyright -->
+                <div class="mt-8 text-center">
+                    <p class="text-slate-400 text-xs">
+                        © 2024 EMS Admin. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

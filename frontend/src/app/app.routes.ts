@@ -3,11 +3,6 @@ import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 
 export const routes: Routes = [
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./features/auth/login/login').then(m => m.Login),
-  },
-  {
     path: 'login/callback',
     loadComponent: () =>
       import('./features/auth/callback/callback').then(m => m.Callback),

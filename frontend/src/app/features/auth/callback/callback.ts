@@ -25,7 +25,7 @@ export class Callback {
         if (isAuthenticated) {
           this.router.navigate(['/dashboard']);
         } else {
-          this.router.navigate(['/login']);
+          window.location.href = 'http://localhost:8082/login';
         }
 
       });

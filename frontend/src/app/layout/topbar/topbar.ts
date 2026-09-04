@@ -59,7 +59,7 @@ export class Topbar implements OnInit, OnDestroy {
     this.oidc.logoff().subscribe(() => {
       this.logoutDialogVisible.set(false);
       this.loggingOut.set(false);
-      this.router.navigate(['/login']);
+      window.location.href = 'http://localhost:8082/login';
     });
   }
 

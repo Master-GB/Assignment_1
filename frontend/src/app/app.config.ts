@@ -29,7 +29,7 @@ export const appConfig: ApplicationConfig = {
           window.location.origin + '/login/callback',
 
         postLogoutRedirectUri:
-          window.location.origin + '/login',
+          'http://localhost:8082/login',
 
         clientId:
           'employee-management-angular',

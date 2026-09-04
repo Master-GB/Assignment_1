@@ -50,6 +50,9 @@ public class SecurityConfig {
                     authorizationServer,
                     configurer -> configurer
                             .oidc(Customizer.withDefaults())
+                            .authorizationEndpoint(authorizationEndpoint ->
+                                    authorizationEndpoint.consentPage(null)
+                            )
             )
 
             .authorizeHttpRequests(authorize -> authorize
@@ -78,8 +81,8 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
 
-                // Public authentication endpoint
-                .requestMatchers("/api/auth/register")
+                // Public authentication endpoints
+                .requestMatchers("/api/auth/register", "/login")
                 .permitAll()
 
                 // Everything else requires authentication
@@ -92,8 +95,21 @@ public class SecurityConfig {
                 .ignoringRequestMatchers("/api/**")
             )
 
-            // Browser login for OAuth2 authorization flow
-            .formLogin(Customizer.withDefaults())
+            // Custom login page configuration
+            .formLogin(form -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/login")
+                .defaultSuccessUrl("http://localhost:4200/dashboard", true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+            )
+
+            // Logout configuration
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login?logout=true")
+                .permitAll()
+            )
 
             // JWT authentication for API requests
             .oauth2ResourceServer(oauth2 -> oauth2
