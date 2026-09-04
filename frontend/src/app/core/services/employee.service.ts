@@ -48,6 +48,18 @@ export class EmployeeService {
     return this.http.delete<void>(`${this.base}/${id}`);
   }
 
+  exportPDF(id: number): Observable<Blob> {
+    return this.http.get(`${this.base}/${id}/export/pdf`, { responseType: 'blob' });
+  }
+
+  exportHTML(id: number): Observable<string> {
+    return this.http.get(`${this.base}/${id}/export/html`, { responseType: 'text' });
+  }
+
+  exportExcel(id: number): Observable<Blob> {
+    return this.http.get(`${this.base}/${id}/export/excel`, { responseType: 'blob' });
+  }
+
   private buildFormData(data: EmployeeCreateRequest, profileImage?: File): FormData {
     const formData = new FormData();
     formData.append('employee', new Blob([JSON.stringify(data)], { type: 'application/json' }));

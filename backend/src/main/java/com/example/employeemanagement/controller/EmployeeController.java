@@ -132,4 +132,27 @@ public class EmployeeController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(value = "/{id}/export/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'EMPLOYEE')")
+    public ResponseEntity<byte[]> exportEmployeePdf(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=employee_" + id + ".pdf")
+                .body(employeeService.exportEmployeePdf(id));
+    }
+
+    @GetMapping(value = "/{id}/export/html", produces = MediaType.TEXT_HTML_VALUE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'EMPLOYEE')")
+    public ResponseEntity<byte[]> exportEmployeeHtml(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(employeeService.exportEmployeeHtml(id));
+    }
+
+    @GetMapping(value = "/{id}/export/excel", produces = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    @PreAuthorize("hasAnyRole('ADMIN', 'HR', 'EMPLOYEE')")
+    public ResponseEntity<byte[]> exportEmployeeExcel(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=employee_" + id + ".xlsx")
+                .body(employeeService.exportEmployeeExcel(id));
+    }
 }

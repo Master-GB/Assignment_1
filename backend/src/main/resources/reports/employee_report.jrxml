@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="EmployeeReport" pageWidth="595" pageHeight="842" columnWidth="555"
+              leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20"
+              uuid="a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d">
+
+    <parameter name="employeeCode" class="java.lang.String"/>
+    <parameter name="firstName" class="java.lang.String"/>
+    <parameter name="lastName" class="java.lang.String"/>
+    <parameter name="nic" class="java.lang.String"/>
+    <parameter name="gender" class="java.lang.String"/>
+    <parameter name="dateOfBirth" class="java.lang.String"/>
+    <parameter name="email" class="java.lang.String"/>
+    <parameter name="mobileNo" class="java.lang.String"/>
+    <parameter name="address" class="java.lang.String"/>
+    <parameter name="designationName" class="java.lang.String"/>
+    <parameter name="status" class="java.lang.String"/>
+
+    <title>
+        <band height="70">
+            <staticText>
+                <reportElement x="0" y="0" width="555" height="45" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000001"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font fontName="SansSerif" size="22" isBold="true"/>
+                </textElement>
+                <text><![CDATA[EMPLOYEE PROFILE]]></text>
+            </staticText>
+            <line>
+                <reportElement x="0" y="58" width="555" height="1" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000002"/>
+                <graphicElement>
+                    <pen lineWidth="1.5"/>
+                </graphicElement>
+            </line>
+        </band>
+    </title>
+
+    <columnHeader>
+        <band height="0"/>
+    </columnHeader>
+
+    <detail>
+        <band height="0"/>
+    </detail>
+
+    <summary>
+        <band height="400">
+
+            <staticText>
+                <reportElement x="20" y="10" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000101"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Employee Code:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="10" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000102"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{employeeCode}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="40" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000103"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Full Name:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="40" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000104"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{firstName} + " " + $P{lastName}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="70" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000105"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Designation:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="70" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000106"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{designationName}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="100" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000107"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[NIC:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="100" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000108"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{nic}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="130" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000109"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Gender:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="130" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000110"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{gender}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="160" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000111"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Date of Birth:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="160" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000112"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{dateOfBirth}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="190" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000113"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Email:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="190" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000114"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{email}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="220" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000115"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Mobile No:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="220" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000116"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{mobileNo}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="250" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000117"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Address:]]></text>
+            </staticText>
+            <textField isStretchWithOverflow="true">
+                <reportElement x="230" y="250" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000118"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{address}]]></textFieldExpression>
+            </textField>
+
+            <staticText>
+                <reportElement x="20" y="290" width="200" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000119"/>
+                <textElement><font fontName="SansSerif" size="10" isBold="true"/></textElement>
+                <text><![CDATA[Status:]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="230" y="290" width="305" height="22" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000120"/>
+                <textElement><font fontName="SansSerif" size="10"/></textElement>
+                <textFieldExpression><![CDATA[$P{status}]]></textFieldExpression>
+            </textField>
+
+            <line>
+                <reportElement x="0" y="330" width="555" height="1" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000121"/>
+                <graphicElement><pen lineWidth="0.5"/></graphicElement>
+            </line>
+
+            <staticText>
+                <reportElement x="0" y="345" width="555" height="20" uuid="a1b2c3d4-e5f6-7a8b-9c0d-000000000122"/>
+                <textElement textAlignment="Center">
+                    <font fontName="SansSerif" size="8"/>
+                </textElement>
+                <text><![CDATA[Generated by Employee Management System]]></text>
+            </staticText>
+
+        </band>
+    </summary>
+
+</jasperReport>

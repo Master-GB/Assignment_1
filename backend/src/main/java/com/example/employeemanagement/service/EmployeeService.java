@@ -34,6 +34,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final DesignationRepository designationRepository;
     private final CloudinaryImageStorageService cloudinaryImageStorageService;
+    private final ReportService reportService;
 
 
 
@@ -341,6 +342,39 @@ public class EmployeeService {
         employeeRepository.delete(employee);
     }
 
+
+    @Transactional(readOnly = true)
+    public byte[] exportEmployeePdf(Long id) {
+        try {
+            Employee employee = employeeRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+            return reportService.exportEmployeeToPdf(employee);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate PDF report", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public byte[] exportEmployeeHtml(Long id) {
+        try {
+            Employee employee = employeeRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+            return reportService.exportEmployeeToHtml(employee);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate HTML report", e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public byte[] exportEmployeeExcel(Long id) {
+        try {
+            Employee employee = employeeRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+            return reportService.exportEmployeeToExcel(employee);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate Excel report", e);
+        }
+    }
 
     private EmployeeResponse mapToResponse(
             Employee employee) {

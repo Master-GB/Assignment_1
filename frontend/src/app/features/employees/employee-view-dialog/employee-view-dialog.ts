@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Employee } from '../../../core/models/employee.model';
+import { EmployeeService } from '../../../core/services/employee.service';
 
 @Component({
   selector: 'app-employee-view-dialog',
@@ -9,9 +10,15 @@ import { Employee } from '../../../core/models/employee.model';
   templateUrl: './employee-view-dialog.html',
 })
 export class EmployeeViewDialog {
+  private readonly empService = inject(EmployeeService);
+
   @Input() visible = false;
   @Input() employee: Employee | null = null;
   @Output() closed = new EventEmitter<void>();
+
+  exportingPdf = signal(false);
+  exportingExcel = signal(false);
+  exportingHtml = signal(false);
 
   close(): void { this.closed.emit(); }
 
@@ -22,51 +29,53 @@ export class EmployeeViewDialog {
 
   exportPDF(): void {
     if (!this.employee) return;
-    const printContents = document.getElementById('view-print-area')?.innerHTML;
-    if (!printContents) return;
-    const win = window.open('', '_blank', 'width=800,height=600');
-    if (!win) return;
-    win.document.write(`
-      <html><head><title>Employee Details - ${this.fullName}</title>
-      <style>
-        body { font-family: Arial, sans-serif; padding: 24px; color: #1e293b; }
-        h1 { color: #4f46e5; margin-bottom: 4px; }
-        .sub { color: #64748b; margin-bottom: 24px; }
-        table { width: 100%; border-collapse: collapse; }
-        td { padding: 10px 16px; border-bottom: 1px solid #e2e8f0; }
-        td:first-child { font-weight: 600; width: 200px; color: #475569; }
-        .badge { display: inline-block; padding: 3px 10px; border-radius: 999px;
-                 font-size: 12px; font-weight: 600; }
-        .badge.active { background: #d1fae5; color: #065f46; }
-        .badge.inactive { background: #fee2e2; color: #991b1b; }
-      </style></head><body>${printContents}</body></html>
-    `);
-    win.document.close();
-    win.focus();
-    setTimeout(() => { win.print(); win.close(); }, 500);
+    this.exportingPdf.set(true);
+    const empCode = this.employee.employeeCode;
+    this.empService.exportPDF(this.employee.id).subscribe({
+      next: (blob) => {
+        this.exportingPdf.set(false);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `employee_${empCode}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => this.exportingPdf.set(false)
+    });
   }
 
   exportExcel(): void {
     if (!this.employee) return;
-    const e = this.employee;
-    const rows = [
-      ['Employee Code', e.employeeCode],
-      ['First Name', e.firstName],
-      ['Last Name', e.lastName],
-      ['Address', e.address],
-      ['NIC', e.nic],
-      ['Mobile No', e.mobileNo],
-      ['Gender', e.gender],
-      ['Email', e.email],
-      ['Designation', e.designationName],
-      ['Date of Birth', e.dateOfBirth],
-      ['Status', e.status],
-    ];
-    const csv = rows.map(r => r.map(c => `"${c ?? ''}"`).join(',')).join('\n');
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `employee_${e.employeeCode}.csv`;
-    link.click();
+    this.exportingExcel.set(true);
+    const empCode = this.employee.employeeCode;
+    this.empService.exportExcel(this.employee.id).subscribe({
+      next: (blob) => {
+        this.exportingExcel.set(false);
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `employee_${empCode}.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => this.exportingExcel.set(false)
+    });
+  }
+
+  previewHTML(): void {
+    if (!this.employee) return;
+    this.exportingHtml.set(true);
+    this.empService.exportHTML(this.employee.id).subscribe({
+      next: (htmlContent) => {
+        this.exportingHtml.set(false);
+        const win = window.open('', '_blank');
+        if (win) {
+          win.document.write(htmlContent);
+          win.document.close();
+        }
+      },
+      error: () => this.exportingHtml.set(false)
+    });
   }
 }
