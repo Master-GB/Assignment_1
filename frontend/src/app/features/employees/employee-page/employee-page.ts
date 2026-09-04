@@ -22,6 +22,7 @@ export class EmployeePage implements OnInit {
 
   formDialogVisible = signal(false);
   viewDialogVisible = signal(false);
+  deleteDialogVisible = signal(false);
 
   selectedEmployee = signal<Employee | null>(null);   // for edit / view
 
@@ -68,6 +69,29 @@ export class EmployeePage implements OnInit {
   openView(emp: Employee): void {
     this.selectedEmployee.set(emp);
     this.viewDialogVisible.set(true);
+  }
+
+  confirmDelete(emp: Employee): void {
+    this.selectedEmployee.set(emp);
+    this.deleteDialogVisible.set(true);
+  }
+
+  executeDelete(): void {
+    const emp = this.selectedEmployee();
+    if (!emp) return;
+    
+    this.loading.set(true);
+    this.empService.delete(emp.id).subscribe({
+      next: () => {
+        this.deleteDialogVisible.set(false);
+        this.loadEmployees();
+      },
+      error: () => {
+        this.errorMessage.set('Failed to delete employee.');
+        this.loading.set(false);
+        this.deleteDialogVisible.set(false);
+      }
+    });
   }
 
   onSaved(): void {

@@ -44,6 +44,10 @@ export class EmployeeService {
     return this.http.put<Employee>(`${this.base}/${id}`, formData);
   }
 
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
+  }
+
   private buildFormData(data: EmployeeCreateRequest, profileImage?: File): FormData {
     const formData = new FormData();
     formData.append('employee', new Blob([JSON.stringify(data)], { type: 'application/json' }));

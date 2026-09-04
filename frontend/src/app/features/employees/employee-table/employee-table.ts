@@ -15,6 +15,7 @@ export class EmployeeTable {
 
   @Output() view = new EventEmitter<Employee>();
   @Output() edit = new EventEmitter<Employee>();
+  @Output() delete = new EventEmitter<Employee>();
   @Output() pageChange = new EventEmitter<number>();
 
   get employees(): Employee[] {
