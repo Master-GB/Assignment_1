@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> response = new HashMap<>();
 
         response.put("timestamp", LocalDateTime.now());
-        response.put("status", 400);
+        response.put("status", HttpStatus.BAD_REQUEST.value());
         response.put("error", "Validation Failed");
         response.put("messages", errors);
 
@@ -64,6 +64,28 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, Object>> handleConstraintViolation(
             ConstraintViolationException exception) {
+
+        return buildResponse(
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage()
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGeneralException(
+            Exception exception) {
+
+        exception.printStackTrace();
+
+        return buildResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "An unexpected error occurred"
+        );
+    }
+
+    @ExceptionHandler(ImageValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleImageValidation(
+            ImageValidationException exception) {
 
         return buildResponse(
                 HttpStatus.BAD_REQUEST,

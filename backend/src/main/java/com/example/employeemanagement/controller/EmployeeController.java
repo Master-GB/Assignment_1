@@ -11,6 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 
 import com.example.employeemanagement.entity.EmployeeStatus;
 import org.springframework.data.domain.Page;
@@ -29,13 +33,16 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
 
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
-    public ResponseEntity<EmployeeResponse> createEmployee(
-            @Valid @RequestBody EmployeeCreateRequest request) {
+    public ResponseEntity<EmployeeResponse> createEmployee( 
+        @RequestPart("employee") @Valid EmployeeCreateRequest request,
+        @RequestPart(value = "profileImage", required = false)
+        MultipartFile profileImage
+    ) throws IOException {
 
         EmployeeResponse response =
-                employeeService.createEmployee(request);
+                employeeService.createEmployee(request, profileImage);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -82,14 +89,21 @@ public class EmployeeController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN', 'HR')")
     public ResponseEntity<EmployeeResponse> updateEmployee(
-            @PathVariable Long id,
-            @Valid @RequestBody EmployeeUpdateRequest request) {
+        @PathVariable Long id,
+        @RequestPart("employee")
+        @Valid EmployeeUpdateRequest request,
+        @RequestPart(
+                value = "profileImage",
+                required = false
+        )
+        MultipartFile profileImage
+    ) throws IOException  {
 
         return ResponseEntity.ok(
-                employeeService.updateEmployee(id, request)
+                employeeService.updateEmployee(id, request, profileImage)
         );
     }
 

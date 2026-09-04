@@ -41,8 +41,6 @@ public class EmployeeCreateRequest {
     @NotNull(message = "Designation is required")
     private Long designationId;
 
-    private String profileImage;
-
     @Past(message = "Date of birth must be in the past")
     private LocalDate dateOfBirth;
 }

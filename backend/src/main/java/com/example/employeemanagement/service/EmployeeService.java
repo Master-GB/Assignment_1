@@ -12,10 +12,12 @@ import com.example.employeemanagement.repository.DesignationRepository;
 import com.example.employeemanagement.repository.EmployeeRepository;
 import com.example.employeemanagement.entity.EmployeeStatus;
 import com.example.employeemanagement.specification.EmployeeSpecification;
+import org.springframework.web.multipart.MultipartFile;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import java.io.IOException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,12 +33,15 @@ public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final DesignationRepository designationRepository;
+    private final CloudinaryImageStorageService cloudinaryImageStorageService;
 
 
 
     @Transactional
     public EmployeeResponse createEmployee(
-            EmployeeCreateRequest request) {
+            EmployeeCreateRequest request,
+            MultipartFile profileImage
+            ) throws IOException {
 
         if (employeeRepository.existsByEmployeeCode(
                 request.getEmployeeCode())) {
@@ -104,20 +110,36 @@ public class EmployeeService {
                 designation
         );
 
-        employee.setProfileImage(
-                request.getProfileImage()
-        );
-
         employee.setDateOfBirth(
                 request.getDateOfBirth()
         );
 
         employee.setStatus(EmployeeStatus.ACTIVE);
 
-        Employee savedEmployee =
-                employeeRepository.save(employee);
+        employee = employeeRepository.save(employee);
+        
+        if (profileImage != null && !profileImage.isEmpty()) {
 
-        return mapToResponse(savedEmployee);
+            String publicId = "employee-" + employee.getId();
+
+            Map<String, Object> uploadResult =
+                    cloudinaryImageStorageService.uploadImage(
+                            profileImage,
+                            publicId
+                    );
+
+            employee.setProfileImage(
+                    (String) uploadResult.get("secure_url")
+            );
+
+            employee.setProfileImagePublicId(
+                    (String) uploadResult.get("public_id")
+            );
+
+            employeeRepository.save(employee);
+        }
+
+        return mapToResponse(employee);
     }
 
 
@@ -157,7 +179,8 @@ public class EmployeeService {
     @Transactional
     public EmployeeResponse updateEmployee(
             Long id,
-            EmployeeUpdateRequest request) {
+            EmployeeUpdateRequest request,
+            MultipartFile profileImage) throws IOException {
 
         Employee employee =
                 employeeRepository.findById(id)
@@ -241,13 +264,29 @@ public class EmployeeService {
                 designation
         );
 
-        employee.setProfileImage(
-                request.getProfileImage()
-        );
 
         employee.setDateOfBirth(
                 request.getDateOfBirth()
         );
+
+        if (profileImage != null && !profileImage.isEmpty()) {
+
+            String publicId = "employee-" + employee.getId();
+
+            Map<String, Object> uploadResult =
+                    cloudinaryImageStorageService.uploadImage(
+                            profileImage,
+                            publicId
+                    );
+
+            employee.setProfileImage(
+                    (String) uploadResult.get("secure_url")
+            );
+
+            employee.setProfileImagePublicId(
+                    (String) uploadResult.get("public_id")
+            );
+        }
 
 
         Employee updatedEmployee =
