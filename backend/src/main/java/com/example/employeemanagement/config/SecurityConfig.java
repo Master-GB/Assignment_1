@@ -39,6 +39,7 @@ public class SecurityConfig {
                 new OAuth2AuthorizationServerConfigurer();
 
         http
+            .cors(Customizer.withDefaults())
             // IMPORTANT:
             // This chain only handles OAuth2 Authorization Server endpoints
             .securityMatcher(
@@ -74,6 +75,7 @@ public class SecurityConfig {
             throws Exception {
 
         http
+            .cors(Customizer.withDefaults())
             .authorizeHttpRequests(authorize -> authorize
 
                 // Public authentication endpoint
@@ -114,7 +116,7 @@ public class SecurityConfig {
     }
 
    @Bean
-public JwtAuthenticationConverter jwtAuthenticationConverter() {
+   public JwtAuthenticationConverter jwtAuthenticationConverter() {
 
     JwtAuthenticationConverter converter =
             new JwtAuthenticationConverter();

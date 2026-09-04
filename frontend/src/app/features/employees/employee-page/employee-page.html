@@ -1,0 +1,59 @@
+<div class="max-w-7xl mx-auto">
+
+  <!-- Page Title Row -->
+  <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
+    <div>
+      <h1 class="text-2xl font-extrabold text-slate-800">Employee Management</h1>
+      <p class="text-sm text-slate-500 mt-0.5">Search, add and manage all employees</p>
+    </div>
+    <button (click)="openNewForm()" id="btn-new-employee"
+            class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold
+                   hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+            style="background: linear-gradient(135deg, #6366f1, #a855f7);">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+      New Employee
+    </button>
+  </div>
+
+  <!-- Error -->
+  @if (errorMessage()) {
+    <div class="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-center gap-2 text-sm">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+      </svg>
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Search Panel -->
+  <div class="mb-5">
+    <app-employee-search (search)="onSearch($event)" (reset)="onReset()" />
+  </div>
+
+  <!-- Results Table -->
+  <app-employee-table
+    [page]="pageData()"
+    [loading]="loading()"
+    (view)="openView($event)"
+    (edit)="openEditForm($event)"
+    (pageChange)="onPageChange($event)"
+  />
+
+  <!-- Form Dialog (Create / Edit) -->
+  <app-employee-form-dialog
+    [visible]="formDialogVisible()"
+    [employee]="selectedEmployee()"
+    (closed)="formDialogVisible.set(false)"
+    (saved)="onSaved()"
+  />
+
+  <!-- View Dialog -->
+  <app-employee-view-dialog
+    [visible]="viewDialogVisible()"
+    [employee]="selectedEmployee()"
+    (closed)="viewDialogVisible.set(false)"
+  />
+
+</div>

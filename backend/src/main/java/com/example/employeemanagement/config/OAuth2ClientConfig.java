@@ -25,6 +25,18 @@ public class OAuth2ClientConfig {
                     registeredClientRepository.findByClientId(clientId);
 
             if (existingClient != null) {
+                // Update the existing client's redirect URIs to match frontend
+                RegisteredClient updatedClient = RegisteredClient.from(existingClient)
+                        .redirectUris(uris -> {
+                            uris.clear();
+                            uris.add("http://localhost:4200/login/callback");
+                        })
+                        .postLogoutRedirectUris(uris -> {
+                            uris.clear();
+                            uris.add("http://localhost:4200/login");
+                        })
+                        .build();
+                registeredClientRepository.save(updatedClient);
                 return;
             }
 
@@ -42,10 +54,10 @@ public class OAuth2ClientConfig {
                             AuthorizationGrantType.REFRESH_TOKEN
                     )
                     .redirectUri(
-                            "http://localhost:4200/login/oauth2/code/angular"
+                            "http://localhost:4200/login/callback"
                     )
                     .postLogoutRedirectUri(
-                            "http://localhost:4200"
+                            "http://localhost:4200/login"
                     )
                     .scope("openid")
                     .scope("profile")
