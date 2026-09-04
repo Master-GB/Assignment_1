@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, inject, signal } from '@angular
 import { NgClass } from '@angular/common';
 import { Employee } from '../../../core/models/employee.model';
 import { EmployeeService } from '../../../core/services/employee.service';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-employee-view-dialog',
@@ -11,6 +12,7 @@ import { EmployeeService } from '../../../core/services/employee.service';
 })
 export class EmployeeViewDialog {
   private readonly empService = inject(EmployeeService);
+  private readonly toast = inject(ToastService);
 
   @Input() visible = false;
   @Input() employee: Employee | null = null;
@@ -40,8 +42,13 @@ export class EmployeeViewDialog {
         link.download = `employee_${empCode}.pdf`;
         link.click();
         window.URL.revokeObjectURL(url);
+        this.toast.success('PDF exported successfully');
       },
-      error: () => this.exportingPdf.set(false)
+      error: (err) => {
+        this.exportingPdf.set(false);
+        const errorMessage = err.error?.message ?? 'Failed to export PDF';
+        this.toast.error(errorMessage);
+      }
     });
   }
 
@@ -58,8 +65,13 @@ export class EmployeeViewDialog {
         link.download = `employee_${empCode}.xlsx`;
         link.click();
         window.URL.revokeObjectURL(url);
+        this.toast.success('Excel exported successfully');
       },
-      error: () => this.exportingExcel.set(false)
+      error: (err) => {
+        this.exportingExcel.set(false);
+        const errorMessage = err.error?.message ?? 'Failed to export Excel';
+        this.toast.error(errorMessage);
+      }
     });
   }
 
@@ -74,8 +86,13 @@ export class EmployeeViewDialog {
           win.document.write(htmlContent);
           win.document.close();
         }
+        this.toast.success('HTML preview opened successfully');
       },
-      error: () => this.exportingHtml.set(false)
+      error: (err) => {
+        this.exportingHtml.set(false);
+        const errorMessage = err.error?.message ?? 'Failed to generate HTML preview';
+        this.toast.error(errorMessage);
+      }
     });
   }
 }

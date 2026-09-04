@@ -16,6 +16,8 @@ export class Topbar implements OnInit, OnDestroy {
   userName = signal('Admin');
   currentTime = signal('');
   currentDate = signal('');
+  logoutDialogVisible = signal(false);
+  loggingOut = signal(false);
 
   private timerInterval?: ReturnType<typeof setInterval>;
   private sub?: Subscription;
@@ -44,8 +46,21 @@ export class Topbar implements OnInit, OnDestroy {
     );
   }
 
-  logout(): void {
-    this.oidc.logoff().subscribe(() => this.router.navigate(['/login']));
+  showLogoutDialog(): void {
+    this.logoutDialogVisible.set(true);
+  }
+
+  cancelLogout(): void {
+    this.logoutDialogVisible.set(false);
+  }
+
+  confirmLogout(): void {
+    this.loggingOut.set(true);
+    this.oidc.logoff().subscribe(() => {
+      this.logoutDialogVisible.set(false);
+      this.loggingOut.set(false);
+      this.router.navigate(['/login']);
+    });
   }
 
   get initials(): string {

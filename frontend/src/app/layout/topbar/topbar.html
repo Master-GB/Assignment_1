@@ -12,7 +12,7 @@
   <!-- Right: Notifications + User -->
   <div class="flex items-center gap-3">
 
-    <!-- Notification bell -->
+    <!-- Notification bell
     <button class="relative w-10 h-10 rounded-xl flex items-center justify-center
                    bg-slate-100 hover:bg-indigo-50 text-slate-500 hover:text-indigo-600
                    transition-all duration-200">
@@ -21,7 +21,7 @@
               d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
       </svg>
       <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span>
-    </button>
+    </button> -->
 
     <!-- Divider -->
     <div class="w-px h-8 bg-slate-200"></div>
@@ -39,12 +39,12 @@
       </div>
 
       <!-- Logout -->
-      <button (click)="logout()"
+      <button (click)="showLogoutDialog()"
               class="ml-2 w-9 h-9 rounded-xl flex items-center justify-center
                      bg-red-50 hover:bg-red-100 text-red-500 hover:text-red-600
-                     transition-all duration-200"
+                     transition-all duration-200 cursor-pointer"
               title="Logout">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
         </svg>
@@ -52,3 +52,42 @@
     </div>
   </div>
 </header>
+
+<!-- Logout Confirmation Dialog -->
+@if (logoutDialogVisible()) {
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  style="background: rgba(15,23,42,0.6); backdrop-filter: blur(4px);">
+  <div class="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-[fadeInScale_0.2s_ease-out]">
+    <div class="p-6">
+      <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-4 mx-auto">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+        </svg>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800 text-center mb-2">Logout?</h3>
+      <p class="text-sm text-slate-500 text-center">
+        Are you sure you want to logout? You will need to sign in again to access your account.
+      </p>
+    </div>
+    <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center gap-3">
+      <button (click)="cancelLogout()" [disabled]="loggingOut()" class="flex-1 px-4 py-2 rounded-xl bg-white border border-slate-200 text-slate-700
+                       text-sm font-semibold hover:bg-slate-50 transition-colors disabled:opacity-50 cursor-pointer">
+        Cancel
+      </button>
+      <button (click)="confirmLogout()" [disabled]="loggingOut()"
+        class="flex-1 px-4 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white
+                       text-sm font-semibold transition-colors disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
+        @if (loggingOut()) {
+        <svg class="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+        </svg>
+        }
+        Logout
+      </button>
+    </div>
+  </div>
+</div>
+}

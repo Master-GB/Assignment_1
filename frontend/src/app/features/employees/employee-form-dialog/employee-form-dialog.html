@@ -144,7 +144,7 @@
             <div class="flex flex-col gap-1.5">
               <label class="text-[13px] font-medium text-slate-600">Date of Birth <span
                   class="text-red-500">*</span></label>
-              <input id="field-dob" formControlName="dateOfBirth" type="date" class="w-full px-3.5 py-2.5 rounded-lg border bg-white text-sm text-slate-800
+              <input id="field-dob" formControlName="dateOfBirth" type="date" [max]="maxDateOfBirth" class="w-full px-3.5 py-2.5 rounded-lg border bg-white text-sm text-slate-800
                               focus:outline-none focus:ring-4 transition-colors duration-150" [ngClass]="isInvalid('dateOfBirth')
                          ? 'border-red-300 focus:ring-red-500/10 focus:border-red-400'
                          : 'border-slate-200 focus:ring-blue-500/10 focus:border-blue-400'">
@@ -223,7 +223,7 @@
                           : 'border-slate-200 focus:ring-blue-500/10 focus:border-blue-400'">
                 <option [ngValue]="null" disabled>Select designation</option>
                 @for (d of designations; track d.id) {
-                <option [ngValue]="d.id">{{ d.name }}</option>
+                <option [ngValue]="d.id">{{ d.designationTitle }}</option>
                 }
               </select>
               @if (isInvalid('designationId')) {
@@ -279,7 +279,7 @@
                 </svg>
                 {{ selectedFile ? 'Change Image' : 'Choose Image' }}
               </label>
-              <input id="field-image" type="file" class="hidden" accept="image/*" (change)="onFileChange($event)">
+              <input id="field-image" #fileInput type="file" class="hidden" accept="image/*" (change)="onFileChange($event)">
               <p class="text-xs text-slate-400 mt-1.5">PNG, JPG up to 5MB</p>
             </div>
           </div>

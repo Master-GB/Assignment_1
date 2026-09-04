@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { EmployeeService } from '../../../core/services/employee.service';
+import { ToastService } from '../../../core/services/toast.service';
 import { Employee, EmployeeSearchParams } from '../../../core/models/employee.model';
 import { Page } from '../../../core/models/page.model';
 import { EmployeeSearch } from '../employee-search/employee-search';
@@ -15,6 +16,7 @@ import { EmployeeViewDialog } from '../employee-view-dialog/employee-view-dialog
 })
 export class EmployeePage implements OnInit {
   private readonly empService = inject(EmployeeService);
+  private readonly toast = inject(ToastService);
 
   pageData = signal<Page<Employee> | null>(null);
   loading = signal(false);
@@ -84,12 +86,51 @@ export class EmployeePage implements OnInit {
     this.empService.delete(emp.id).subscribe({
       next: () => {
         this.deleteDialogVisible.set(false);
+        this.toast.success('Employee deleted successfully');
         this.loadEmployees();
       },
-      error: () => {
-        this.errorMessage.set('Failed to delete employee.');
+      error: (err) => {
+        const errorMessage = err.error?.message ?? 'Failed to delete employee.';
+        this.errorMessage.set(errorMessage);
+        this.toast.error(errorMessage);
         this.loading.set(false);
         this.deleteDialogVisible.set(false);
+      }
+    });
+  }
+
+  exportPDF(emp: Employee): void {
+    this.empService.exportPDF(emp.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `employee_${emp.id}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.toast.success('PDF exported successfully');
+      },
+      error: (err) => {
+        const errorMessage = err.error?.message ?? 'Failed to export PDF';
+        this.toast.error(errorMessage);
+      }
+    });
+  }
+
+  exportExcel(emp: Employee): void {
+    this.empService.exportExcel(emp.id).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `employee_${emp.id}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.toast.success('Excel exported successfully');
+      },
+      error: (err) => {
+        const errorMessage = err.error?.message ?? 'Failed to export Excel';
+        this.toast.error(errorMessage);
       }
     });
   }

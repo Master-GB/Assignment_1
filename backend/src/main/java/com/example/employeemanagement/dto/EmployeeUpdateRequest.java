@@ -1,5 +1,6 @@
 package com.example.employeemanagement.dto;
 
+import com.example.employeemanagement.entity.EmployeeStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -46,4 +47,6 @@ public class EmployeeUpdateRequest {
 
     @Past(message = "Date of birth must be in the past")
     private LocalDate dateOfBirth;
+
+    private EmployeeStatus status;
 }

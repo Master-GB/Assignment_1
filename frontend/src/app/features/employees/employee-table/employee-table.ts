@@ -17,6 +17,8 @@ export class EmployeeTable {
   @Output() edit = new EventEmitter<Employee>();
   @Output() delete = new EventEmitter<Employee>();
   @Output() pageChange = new EventEmitter<number>();
+  @Output() exportPDF = new EventEmitter<Employee>();
+  @Output() exportExcel = new EventEmitter<Employee>();
 
   get employees(): Employee[] {
     return this.page?.content ?? [];
@@ -55,6 +57,14 @@ export class EmployeeTable {
 
   goToPage(page: number): void {
     this.pageChange.emit(page);
+  }
+
+  onExportPDF(emp: Employee): void {
+    this.exportPDF.emit(emp);
+  }
+
+  onExportExcel(emp: Employee): void {
+    this.exportExcel.emit(emp);
   }
 
   skeletonRows = Array(6);

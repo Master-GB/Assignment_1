@@ -115,7 +115,11 @@ public class EmployeeService {
                 request.getDateOfBirth()
         );
 
-        employee.setStatus(EmployeeStatus.ACTIVE);
+        employee.setStatus(
+                request.getStatus() != null 
+                    ? request.getStatus() 
+                    : EmployeeStatus.ACTIVE
+        );
 
         employee = employeeRepository.save(employee);
         
@@ -269,6 +273,10 @@ public class EmployeeService {
         employee.setDateOfBirth(
                 request.getDateOfBirth()
         );
+
+        if (request.getStatus() != null) {
+            employee.setStatus(request.getStatus());
+        }
 
         if (profileImage != null && !profileImage.isEmpty()) {
 

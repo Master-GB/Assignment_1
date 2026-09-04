@@ -7,7 +7,7 @@
       <p class="text-sm text-slate-500 mt-0.5">Search, add and manage all employees</p>
     </div>
     <button (click)="openNewForm()" id="btn-new-employee" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold
-                   hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                   hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 cursor-pointer"
       style="background: linear-gradient(135deg, #6366f1, #a855f7);">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -35,7 +35,7 @@
 
   <!-- Results Table -->
   <app-employee-table [page]="pageData()" [loading]="loading()" (view)="openView($event)" (edit)="openEditForm($event)"
-    (delete)="confirmDelete($event)" (pageChange)="onPageChange($event)" />
+    (delete)="confirmDelete($event)" (pageChange)="onPageChange($event)" (exportPDF)="exportPDF($event)" (exportExcel)="exportExcel($event)" />
 
   <!-- Form Dialog (Create / Edit) -->
   <app-employee-form-dialog [visible]="formDialogVisible()" [employee]="selectedEmployee()"
